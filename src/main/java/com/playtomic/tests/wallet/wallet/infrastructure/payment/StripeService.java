@@ -1,6 +1,7 @@
-package com.playtomic.tests.wallet.service;
+package com.playtomic.tests.wallet.wallet.infrastructure.payment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.playtomic.tests.wallet.wallet.domain.PaymentClient;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +20,7 @@ import java.net.URI;
  * This dummy implementation throws an error when trying to charge less than 10€.
  */
 @Service
-public class StripeService {
+public class StripeService implements PaymentClient {
 
     @NonNull
     private URI chargesUri;
@@ -51,14 +52,16 @@ public class StripeService {
      *
      * @throws StripeServiceException
      */
-    public Payment charge(@NonNull String creditCardNumber, @NonNull BigDecimal amount) throws StripeServiceException {
+    @Override
+    public String charge(@NonNull String creditCardNumber, @NonNull BigDecimal amount) throws StripeServiceException {
         ChargeRequest body = new ChargeRequest(creditCardNumber, amount);
-        return restTemplate.postForObject(chargesUri, body, Payment.class);
+        return restTemplate.postForObject(chargesUri, body, Payment.class).getId();
     }
 
     /**
      * Refunds the specified payment.
      */
+    @Override
     public void refund(@NonNull String paymentId) throws StripeServiceException {
         // Object.class because we don't read the body here.
         restTemplate.postForEntity(chargesUri.toString(), null, Object.class, paymentId);

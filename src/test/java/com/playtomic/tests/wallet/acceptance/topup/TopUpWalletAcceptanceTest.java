@@ -26,8 +26,8 @@ public class TopUpWalletAcceptanceTest extends AcceptanceTest {
         stripeMockServer.start();
     }
 
-    @AfterEach
-    void tearDown() {
+    @Override
+    protected void afterEach() {
         stripeMockServer.stop();
     }
 

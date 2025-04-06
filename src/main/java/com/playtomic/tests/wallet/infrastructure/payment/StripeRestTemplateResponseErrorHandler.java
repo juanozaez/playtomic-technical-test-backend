@@ -2,9 +2,9 @@ package com.playtomic.tests.wallet.infrastructure.payment;
 
 import com.playtomic.tests.wallet.infrastructure.payment.error.StripeAmountTooSmallException;
 import com.playtomic.tests.wallet.infrastructure.payment.error.StripeServiceException;
+import java.io.IOException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
-import java.io.IOException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResponseErrorHandler;
 

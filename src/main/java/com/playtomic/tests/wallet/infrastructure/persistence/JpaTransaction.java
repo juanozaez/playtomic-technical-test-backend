@@ -18,14 +18,12 @@ import lombok.Setter;
 public class JpaTransaction {
 
     @Id
-    private Long id;
-    @Column
-    private String paymentId;
+    private String id;
     @Column
     private BigDecimal amount;
 
-    public JpaTransaction(String paymentId, BigDecimal amount) {
-        this.paymentId = paymentId;
+    public JpaTransaction(String id, BigDecimal amount) {
+        this.id = id;
         this.amount = amount;
     }
 }

@@ -2,6 +2,7 @@ package com.playtomic.tests.wallet.infrastructure.persistence;
 
 import com.playtomic.tests.wallet.domain.Balance;
 import com.playtomic.tests.wallet.domain.Transaction;
+import com.playtomic.tests.wallet.domain.TransactionId;
 import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.WalletId;
 import com.playtomic.tests.wallet.domain.WalletRepository;
@@ -29,7 +30,9 @@ public class JpaWalletRepository implements WalletRepository {
 
     @Override
     public Wallet findById(WalletId walletId) {
-        return toEntity(repository.findById(walletId.getValue().toString()).get());
+        return repository.findById(walletId.getValue().toString())
+                .map(this::toEntity)
+                .orElse(null);
     }
 
     @Transactional
@@ -46,13 +49,18 @@ public class JpaWalletRepository implements WalletRepository {
     private Wallet toEntity(JpaWallet jpaWallet) {
         return new Wallet(WalletId.fromString(jpaWallet.getId()),
                 new Balance(jpaWallet.getBalance()),
-                jpaWallet.getTransactions().stream().map(transaction -> new Transaction(transaction.getPaymentId(), transaction.getAmount()))
+                jpaWallet
+                        .getTransactions().stream()
+                        .map(transaction -> new Transaction(TransactionId.fromString(transaction.getId()), transaction.getAmount()))
                         .toList());
     }
 
     private JpaWallet toJpa(Wallet wallet) {
-        return new JpaWallet(wallet.getId().getValue().toString(), wallet.balance().amount,
-                wallet.transactions().stream().map(transaction -> new JpaTransaction(transaction.getPaymentId(), transaction.getAmount()))
+        return new JpaWallet(wallet.id().getValue().toString(), wallet.balance().amount,
+                wallet
+                        .transactions()
+                        .stream()
+                        .map(transaction -> new JpaTransaction(transaction.id().toString(), transaction.amount()))
                         .toList());
     }
 }

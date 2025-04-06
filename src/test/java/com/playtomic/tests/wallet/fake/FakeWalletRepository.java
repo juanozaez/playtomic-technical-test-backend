@@ -16,7 +16,7 @@ public class FakeWalletRepository implements WalletRepository {
     @Override
     public Wallet findById(WalletId walletId) {
         return wallets.stream()
-                .filter(wallet -> wallet.getId().equals(walletId))
+                .filter(wallet -> wallet.id().equals(walletId))
                 .findFirst()
                 .orElse(null);
     }
@@ -28,7 +28,7 @@ public class FakeWalletRepository implements WalletRepository {
 
     @Override
     public void save(Wallet wallet) {
-        Wallet existingWallet = findById(wallet.getId());
+        Wallet existingWallet = findById(wallet.id());
         if (existingWallet != null) {
             wallets.remove(existingWallet);
         }

@@ -1,5 +1,6 @@
 package com.playtomic.tests.wallet.mother;
 
+import com.playtomic.tests.wallet.domain.TransactionId;
 import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.WalletId;
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ public class WalletMother {
 
     public static Wallet positiveWallet() {
         return Wallet.emptyWallet(new WalletId(UUID.randomUUID()))
-                .topUp(new BigDecimal(70));
+                .topUp(new BigDecimal(70),
+                        new TransactionId(UUID.randomUUID()));
     }
 }

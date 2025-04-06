@@ -1,16 +1,11 @@
 package com.playtomic.tests.wallet.infrastructure.rest.topup;
 
 import java.math.BigDecimal;
-import lombok.Data;
 
-@Data
-public class TransactionRequest {
-    private String transactionId;
-    private BigDecimal amount;
-    private CreditCard creditCard;
+public record TransactionRequest(String transactionId,
+                                 BigDecimal amount,
+                                 CreditCard creditCard) {
 
-    @Data
-    public static class CreditCard {
-        private String cardNumber;
+    public static record CreditCard(String cardNumber) {
     }
 }

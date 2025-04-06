@@ -20,7 +20,7 @@ public class JpaWalletRepositoryTest {
     void saves_and_finds_wallet() {
         repo.save(wallet);
 
-        Wallet result = repo.findById(wallet.getId());
+        Wallet result = repo.findById(wallet.id());
 
         assert result.equals(wallet);
     }

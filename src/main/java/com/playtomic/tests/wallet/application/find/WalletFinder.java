@@ -2,8 +2,8 @@ package com.playtomic.tests.wallet.application.find;
 
 import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.WalletId;
-import com.playtomic.tests.wallet.domain.error.WalletNotFoundError;
 import com.playtomic.tests.wallet.domain.WalletRepository;
+import com.playtomic.tests.wallet.domain.error.WalletNotFoundError;
 import org.springframework.stereotype.Service;
 
 @Service

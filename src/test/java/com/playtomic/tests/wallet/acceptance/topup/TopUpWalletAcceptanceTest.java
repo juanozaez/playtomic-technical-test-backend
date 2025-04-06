@@ -9,8 +9,6 @@ import com.playtomic.tests.wallet.domain.WalletRepository;
 import com.playtomic.tests.wallet.fake.StripeMockServer;
 import com.playtomic.tests.wallet.mother.WalletMother;
 import java.math.BigDecimal;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -42,11 +40,11 @@ public class TopUpWalletAcceptanceTest extends AcceptanceTest {
                 contentType("application/json").
                 body(body).
                 when().
-                post("/wallets/{id}/transactions", wallet.getId().getValue()).
+                post("/wallets/{id}/transactions", wallet.id().getValue()).
                 then().
                 statusCode(200);
 
-        assert walletRepository.findById(wallet.getId()).balance().equals(expectedBalance);
+        assert walletRepository.findById(wallet.id()).balance().equals(expectedBalance);
     }
 
     private void walletExists() {
@@ -55,7 +53,7 @@ public class TopUpWalletAcceptanceTest extends AcceptanceTest {
 
     private final Wallet wallet = WalletMother.positiveWallet();
     private final BigDecimal topUpAmount = new BigDecimal("30.50");
-    private final Balance expectedBalance = new Balance(topUpAmount.add(wallet.getBalance().amount));
+    private final Balance expectedBalance = new Balance(topUpAmount.add(wallet.balance().amount));
     private final Card card = CardMother.valid();
     private final String body = String.format("""
             {

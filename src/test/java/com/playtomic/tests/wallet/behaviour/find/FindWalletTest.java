@@ -24,14 +24,14 @@ public class FindWalletTest {
     public void finds_wallet() {
         repository.save(wallet);
 
-        Wallet result = finder.findById(wallet.getId());
+        Wallet result = finder.findById(wallet.id());
 
         assert result.equals(wallet);
     }
 
     @Test
     public void returns_error_if_wallet_not_found() {
-        assertThrows(WalletNotFoundError.class, () -> finder.findById(wallet.getId()));
+        assertThrows(WalletNotFoundError.class, () -> finder.findById(wallet.id()));
     }
 
     private final Wallet wallet = WalletMother.positiveWallet();

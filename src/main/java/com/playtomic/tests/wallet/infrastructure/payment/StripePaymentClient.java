@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.playtomic.tests.card.domain.Card;
 import com.playtomic.tests.wallet.domain.PaymentClient;
 import com.playtomic.tests.wallet.infrastructure.payment.error.StripeServiceException;
+import java.math.BigDecimal;
+import java.net.URI;
 import java.util.Collections;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -13,9 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.math.BigDecimal;
-import java.net.URI;
 
 
 @Service
@@ -40,9 +39,9 @@ public class StripePaymentClient implements PaymentClient {
 
         this.restTemplate =
                 restTemplateBuilder
-                .errorHandler(new StripeRestTemplateResponseErrorHandler())
+                        .errorHandler(new StripeRestTemplateResponseErrorHandler())
                         .messageConverters(converter)
-                .build();
+                        .build();
     }
 
     @Override

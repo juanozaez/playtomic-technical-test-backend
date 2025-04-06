@@ -21,7 +21,7 @@ import java.net.URI;
  * This dummy implementation throws an error when trying to charge less than 10€.
  */
 @Service
-public class StripeService implements PaymentClient {
+public class StripePaymentClient implements PaymentClient {
 
     @NonNull
     private URI chargesUri;
@@ -32,9 +32,9 @@ public class StripeService implements PaymentClient {
     @NonNull
     private RestTemplate restTemplate;
 
-    public StripeService(@Value("${stripe.simulator.charges-uri}") @NonNull URI chargesUri,
-                         @Value("${stripe.simulator.refunds-uri}") @NonNull URI refundsUri,
-                         @NonNull RestTemplateBuilder restTemplateBuilder) {
+    public StripePaymentClient(@Value("${stripe.simulator.charges-uri}") @NonNull URI chargesUri,
+                               @Value("${stripe.simulator.refunds-uri}") @NonNull URI refundsUri,
+                               @NonNull RestTemplateBuilder restTemplateBuilder) {
         this.chargesUri = chargesUri;
         this.refundsUri = refundsUri;
         this.restTemplate =

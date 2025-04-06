@@ -3,7 +3,7 @@ package com.playtomic.tests.service.impl;
 
 import com.playtomic.tests.wallet.infrastructure.payment.StripeAmountTooSmallException;
 import com.playtomic.tests.wallet.infrastructure.payment.StripeServiceException;
-import com.playtomic.tests.wallet.infrastructure.payment.StripeService;
+import com.playtomic.tests.wallet.infrastructure.payment.StripePaymentClient;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import java.net.URI;
 public class StripeServiceTest {
 
     URI testUri = URI.create("http://how-would-you-test-me.localhost");
-    StripeService s = new StripeService(testUri, testUri, new RestTemplateBuilder());
+    StripePaymentClient s = new StripePaymentClient(testUri, testUri, new RestTemplateBuilder());
 
     @Test
     public void test_exception() {

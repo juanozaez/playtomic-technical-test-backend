@@ -1,9 +1,11 @@
 package com.playtomic.tests.wallet.infrastructure.rest.find;
 
 import com.playtomic.tests.wallet.application.find.WalletFinder;
+import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.WalletId;
 import java.util.UUID;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +19,9 @@ public class FindWalletController {
     }
 
     @GetMapping("/wallets/{id}")
-    void find(@RequestParam String walletId) {
-        finder.findById(new WalletId(UUID.fromString(walletId)));
+    FindWalletResponse find(@PathVariable String id) {
+        Wallet wallet = finder.findById(new WalletId(UUID.fromString(id)));
+        return new FindWalletResponse(wallet.getId().getValue().toString(), wallet.balance().amount);
     }
+
 }

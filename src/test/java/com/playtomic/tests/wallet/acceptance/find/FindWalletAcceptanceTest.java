@@ -1,5 +1,6 @@
 package com.playtomic.tests.wallet.acceptance.find;
 
+import com.playtomic.tests.AcceptanceTest;
 import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.WalletRepository;
 import com.playtomic.tests.wallet.mother.WalletMother;
@@ -15,21 +16,10 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static io.restassured.RestAssured.given;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles(profiles = "test")
-public class FindWalletAcceptanceTest {
-
-    @LocalServerPort
-    private Integer port = 0;
+public class FindWalletAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private WalletRepository walletRepository;
-
-    @BeforeEach
-    public void setUp() {
-        RestAssured.port = port;
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-    }
 
     @Test
     public void finds_wallet() throws JSONException {

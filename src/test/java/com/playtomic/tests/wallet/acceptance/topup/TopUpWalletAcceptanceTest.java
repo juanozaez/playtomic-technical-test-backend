@@ -1,5 +1,6 @@
 package com.playtomic.tests.wallet.acceptance.topup;
 
+import com.playtomic.tests.AcceptanceTest;
 import com.playtomic.tests.card.domain.Card;
 import com.playtomic.tests.card.mother.CardMother;
 import com.playtomic.tests.wallet.domain.Balance;
@@ -7,32 +8,21 @@ import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.WalletRepository;
 import com.playtomic.tests.wallet.fake.StripeMockServer;
 import com.playtomic.tests.wallet.mother.WalletMother;
-import io.restassured.RestAssured;
 import java.math.BigDecimal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.context.ActiveProfiles;
 
 import static io.restassured.RestAssured.given;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles(profiles = "test")
-public class TopUpWalletAcceptanceTest {
-
-    @LocalServerPort
-    private Integer port = 0;
+public class TopUpWalletAcceptanceTest extends AcceptanceTest {
 
     @Autowired
     private WalletRepository walletRepository;
 
-    @BeforeEach
-    public void setUp() {
-        RestAssured.port = port;
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+    @Override
+    protected void beforeEach() {
         stripeMockServer.start();
     }
 
@@ -51,9 +41,9 @@ public class TopUpWalletAcceptanceTest {
         given().
                 contentType("application/json").
                 body(body).
-        when().
+                when().
                 post("/wallets/{id}/transactions", wallet.getId().getValue()).
-        then().
+                then().
                 statusCode(200);
 
         assert walletRepository.findById(wallet.getId()).balance().equals(expectedBalance);

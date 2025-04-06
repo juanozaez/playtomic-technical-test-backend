@@ -20,7 +20,6 @@ public class WalletTopUpMaker {
         this.paymentClient = paymentClient;
     }
 
-    @Transactional
     public void topUp(WalletId walletId, BigDecimal amount, Card card) {
         Wallet wallet = walletRepository.findForUpdateById(walletId);
         if (wallet == null) {

@@ -1,11 +1,15 @@
 package com.playtomic.tests.wallet.acceptance.topup;
 
+import com.playtomic.tests.card.domain.Card;
+import com.playtomic.tests.card.mother.CardMother;
 import com.playtomic.tests.wallet.domain.Balance;
 import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.WalletRepository;
+import com.playtomic.tests.wallet.fake.StripeMockServer;
 import com.playtomic.tests.wallet.mother.WalletMother;
 import io.restassured.RestAssured;
 import java.math.BigDecimal;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +33,20 @@ public class TopUpWalletAcceptanceTest {
     public void setUp() {
         RestAssured.port = port;
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+        stripeMockServer.start();
     }
+
+    @AfterEach
+    void tearDown() {
+        stripeMockServer.stop();
+    }
+
+    private final StripeMockServer stripeMockServer = new StripeMockServer();
 
     @Test
     public void topsUpWallet() {
         walletExists();
+        stripeMockServer.stubCharge(card, topUpAmount, "123456789");
 
         given().
                 contentType("application/json").
@@ -53,13 +66,14 @@ public class TopUpWalletAcceptanceTest {
     private final Wallet wallet = WalletMother.positiveWallet();
     private final BigDecimal topUpAmount = new BigDecimal("30.50");
     private final Balance expectedBalance = new Balance(topUpAmount.add(wallet.getBalance().amount));
-    private final String body = """
+    private final Card card = CardMother.valid();
+    private final String body = String.format("""
             {
                 "transactionId": "6ff22ba2-7c3a-43df-9bd2-7f35e40c1d9c",
-                "amount": 30.50,
+                "amount": %.2f,
                 "creditCard": {
-                    "cardNumber": "4111111111111111"
+                    "cardNumber": "%s"
                 }
             }
-            """;
+            """, topUpAmount, card.number());
 }

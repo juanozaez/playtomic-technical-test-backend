@@ -75,6 +75,14 @@
 			<scope>test</scope>
 		</dependency>
 
+
+		<dependency>
+			<groupId>org.wiremock</groupId>
+			<artifactId>wiremock-jetty12</artifactId>
+			<version>3.7.0</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 

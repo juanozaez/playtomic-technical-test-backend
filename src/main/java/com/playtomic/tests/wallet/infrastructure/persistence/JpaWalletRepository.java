@@ -8,33 +8,39 @@ import com.playtomic.tests.wallet.domain.WalletRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class JpaWalletRepository implements WalletRepository {
 
+    private final InternalJpaWalletRepository repository;
+
     @PersistenceContext
     private final EntityManager entityManager;
 
-    public JpaWalletRepository(EntityManager entityManager) {
+    @Autowired
+    JpaWalletRepository(EntityManager entityManager, InternalJpaWalletRepository repository) {
         this.entityManager = entityManager;
+        this.repository = repository;
     }
 
     @Override
     public Wallet findById(WalletId walletId) {
-        return toEntity(entityManager.find(JpaWallet.class, walletId.getValue().toString()));
-    }
-
-    @Override
-    public Wallet findForUpdateById(WalletId walletId) {
-        return toEntity(entityManager.find(JpaWallet.class, walletId.getValue().toString(), LockModeType.OPTIMISTIC));
+        return toEntity(repository.findById(walletId.getValue().toString()).get());
     }
 
     @Transactional
     @Override
+    public Wallet findForUpdateById(WalletId walletId) {
+        return toEntity(entityManager.find(JpaWallet.class, walletId.getValue().toString(), LockModeType.PESSIMISTIC_READ));
+    }
+
+    @Override
     public void save(Wallet wallet) {
-        entityManager.persist(toJpa(wallet));
+        repository.save(toJpa(wallet));
     }
 
     private Wallet toEntity(JpaWallet jpaWallet) {
@@ -49,4 +55,8 @@ public class JpaWalletRepository implements WalletRepository {
                 wallet.transactions().stream().map(transaction -> new JpaTransaction(transaction.getPaymentId(), transaction.getAmount()))
                         .toList());
     }
+}
+
+@Repository
+interface InternalJpaWalletRepository extends JpaRepository<JpaWallet, String> {
 }

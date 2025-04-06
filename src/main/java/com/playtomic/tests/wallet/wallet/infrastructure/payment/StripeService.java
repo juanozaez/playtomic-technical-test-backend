@@ -1,6 +1,7 @@
 package com.playtomic.tests.wallet.wallet.infrastructure.payment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.playtomic.tests.wallet.card.domain.Card;
 import com.playtomic.tests.wallet.wallet.domain.PaymentClient;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -53,8 +54,8 @@ public class StripeService implements PaymentClient {
      * @throws StripeServiceException
      */
     @Override
-    public String charge(@NonNull String creditCardNumber, @NonNull BigDecimal amount) throws StripeServiceException {
-        ChargeRequest body = new ChargeRequest(creditCardNumber, amount);
+    public String charge(@NonNull Card card, @NonNull BigDecimal amount) throws StripeServiceException {
+        ChargeRequest body = new ChargeRequest(card.number(), amount);
         return restTemplate.postForObject(chargesUri, body, Payment.class).getId();
     }
 

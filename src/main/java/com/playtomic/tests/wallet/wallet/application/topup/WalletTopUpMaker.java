@@ -1,5 +1,6 @@
 package com.playtomic.tests.wallet.wallet.application.topup;
 
+import com.playtomic.tests.wallet.card.domain.Card;
 import com.playtomic.tests.wallet.wallet.domain.PaymentClient;
 import com.playtomic.tests.wallet.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.wallet.domain.WalletId;
@@ -18,14 +19,14 @@ public class WalletTopUpMaker {
         this.paymentClient = paymentClient;
     }
 
-    public void topUp(WalletId walletId, BigDecimal amount, String creditCardNumber) {
+    public void topUp(WalletId walletId, BigDecimal amount, Card card) {
         Wallet wallet = walletRepository.findForUpdateById(walletId);
         if (wallet == null) {
             throw new WalletNotFoundError();
         }
 
-        paymentClient.charge(creditCardNumber, amount);
-        wallet.topUp(amount);
-        walletRepository.save(wallet);
+        Wallet updatedWallet = wallet.topUp(amount);
+        paymentClient.charge(card, amount);
+        walletRepository.save(updatedWallet);
     }
 }

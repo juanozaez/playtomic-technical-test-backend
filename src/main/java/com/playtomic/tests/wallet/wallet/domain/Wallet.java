@@ -1,6 +1,7 @@
 package com.playtomic.tests.wallet.wallet.domain;
 
 import com.playtomic.tests.wallet.wallet.domain.error.InsufficientWalletBalanceError;
+import com.playtomic.tests.wallet.wallet.domain.error.NegativeAmountError;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -25,12 +26,13 @@ public class Wallet {
     }
 
     public Wallet topUp(BigDecimal amount) {
-        // TODO check positive amount
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new NegativeAmountError();
+        }
         return new Wallet(this.id, new Balance(this.balance.amount.add(amount)), this.transactions);
     }
 
     public Wallet charge(BigDecimal amount) {
-        // TODO check enough money
         if (balance.amount.compareTo(amount) < 0) {
             throw new InsufficientWalletBalanceError();
         }
@@ -58,14 +60,3 @@ class Transaction {
     }
 }
 
-class Balance {
-    public BigDecimal amount;
-
-    public Balance(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public static Balance zero() {
-        return new Balance(BigDecimal.ZERO);
-    }
-}

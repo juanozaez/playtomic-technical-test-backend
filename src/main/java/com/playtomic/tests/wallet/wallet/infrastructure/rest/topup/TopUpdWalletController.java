@@ -1,5 +1,7 @@
 package com.playtomic.tests.wallet.wallet.infrastructure.rest.topup;
 
+import com.playtomic.tests.wallet.card.domain.Card;
+import com.playtomic.tests.wallet.card.domain.CardNumber;
 import com.playtomic.tests.wallet.wallet.application.topup.WalletTopUpMaker;
 import com.playtomic.tests.wallet.wallet.domain.WalletId;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +21,6 @@ public class TopUpdWalletController {
     @PostMapping("/wallets/{id}/transactions")
     public void topUpWallet(@PathVariable String id,
                             @RequestBody TransactionRequest transactionRequest) {
-        maker.topUp(WalletId.fromString(id), transactionRequest.getAmount(), transactionRequest.getCreditCard().getCardNumber());
+        maker.topUp(WalletId.fromString(id), transactionRequest.getAmount(), new Card(new CardNumber(transactionRequest.getCreditCard().getCardNumber())));
     }
 }

@@ -9,6 +9,10 @@ import java.util.List;
 public class FakeWalletRepository implements WalletRepository {
     private List<Wallet> wallets = new ArrayList<>();
 
+    public void reset() {
+        wallets.clear();
+    }
+
     @Override
     public Wallet findById(WalletId walletId) {
         return wallets.stream()
@@ -24,6 +28,11 @@ public class FakeWalletRepository implements WalletRepository {
 
     @Override
     public void save(Wallet wallet) {
+        Wallet existingWallet = findById(wallet.getId());
+        if (existingWallet != null) {
+            wallets.remove(existingWallet);
+        }
         wallets.add(wallet);
+
     }
 }

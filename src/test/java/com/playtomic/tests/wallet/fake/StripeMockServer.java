@@ -31,7 +31,7 @@ public class StripeMockServer {
     public void stubCharge(Card card, BigDecimal amount, String paymentId) {
         wiremock.register(
                 post("/charges")
-                        .withRequestBody(equalToJson("{ \"amount\": " + amount + ", \"credit_card\": \"" + card.number() + "\" }"))
+                        .withRequestBody(equalToJson("{ \"amount\": " + amount + ", \"credit_card\": \"" + card.numberAsString() + "\" }"))
                         .willReturn(
                                 aResponse().
                                         withBody("{ \"id\": \"" + paymentId + "\" }").
@@ -41,7 +41,7 @@ public class StripeMockServer {
     public void stubChargeToFailureDueToMinAmount(Card card, BigDecimal amount) {
         wiremock.register(
                 post("/charges")
-                        .withRequestBody(equalToJson("{ \"amount\": " + amount + ", \"credit_card\": \"" + card.number() + "\" }"))
+                        .withRequestBody(equalToJson("{ \"amount\": " + amount + ", \"credit_card\": \"" + card.numberAsString() + "\" }"))
                         .willReturn(
                                 aResponse().
                                         withStatus(422)));
@@ -59,7 +59,7 @@ public class StripeMockServer {
         wiremock.verifyThat(
                 postRequestedFor(
                         urlEqualTo("/charges")
-                ).withRequestBody(equalToJson("{ \"amount\": " + amount.intValue() + ", \"credit_card\": \"" + card.number() + "\" }"))
+                ).withRequestBody(equalToJson("{ \"amount\": " + amount.intValue() + ", \"credit_card\": \"" + card.numberAsString() + "\" }"))
         );
     }
 }

@@ -28,7 +28,11 @@ public class JpaWalletRepositoryTest {
     @Test
     @Transactional
     void finds_wallet_for_update() {
-        // TODO to improve: proper assertion to verify a lock is taking place
+        repo.save(wallet);
+
+        Wallet result = repo.findByIdLocking(wallet.id());
+
+        assert result.equals(wallet);
     }
 
     private final Wallet wallet = WalletMother.positiveWallet();

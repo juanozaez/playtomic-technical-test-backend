@@ -22,7 +22,7 @@ public class FakeWalletRepository implements WalletRepository {
     }
 
     @Override
-    public Wallet findForUpdateById(WalletId walletId) {
+    public Wallet findByIdLocking(WalletId walletId) {
         return findById(walletId);
     }
 

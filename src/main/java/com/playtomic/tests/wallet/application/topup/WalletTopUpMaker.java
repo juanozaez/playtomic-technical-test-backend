@@ -22,8 +22,10 @@ public class WalletTopUpMaker {
     }
 
     public void topUp(@NonNull WalletId walletId, @NonNull BigDecimal amount, @NonNull Card card, @NonNull TransactionId transactionId) {
-        Wallet wallet = walletRepository.findForUpdateById(walletId);
-        if (wallet == null) throw new WalletNotFoundError();
+        Wallet wallet = walletRepository.findByIdLocking(walletId);
+        if (wallet == null) {
+            throw new WalletNotFoundError();
+        }
 
         Wallet updatedWallet = wallet.topUp(amount, transactionId);
         paymentClient.charge(card, amount);

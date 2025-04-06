@@ -63,5 +63,5 @@ public class TopUpWalletAcceptanceTest extends AcceptanceTest {
                     "cardNumber": "%s"
                 }
             }
-            """, topUpAmount, card.number());
+            """, topUpAmount, card.numberAsString());
 }

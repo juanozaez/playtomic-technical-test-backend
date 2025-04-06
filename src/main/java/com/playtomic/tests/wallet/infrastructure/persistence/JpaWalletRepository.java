@@ -7,12 +7,12 @@ import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.WalletId;
 import com.playtomic.tests.wallet.domain.WalletRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class JpaWalletRepository implements WalletRepository {
@@ -35,10 +35,11 @@ public class JpaWalletRepository implements WalletRepository {
                 .orElse(null);
     }
 
-    @Transactional
     @Override
-    public Wallet findForUpdateById(WalletId walletId) {
-        return toEntity(entityManager.find(JpaWallet.class, walletId.value().toString(), LockModeType.PESSIMISTIC_READ));
+    public Wallet findByIdLocking(WalletId walletId) {
+        return repository.findForUpdate(walletId.value().toString())
+                .map(this::toEntity)
+                .orElse(null);
     }
 
     @Override
@@ -67,4 +68,7 @@ public class JpaWalletRepository implements WalletRepository {
 
 @Repository
 interface InternalJpaWalletRepository extends JpaRepository<JpaWallet, String> {
+    @Query(value = "SELECT * FROM WALLET WHERE id = :id FOR UPDATE", nativeQuery = true)
+    Optional<JpaWallet> findForUpdate(String id);
+
 }

@@ -1,5 +1,7 @@
 package com.playtomic.tests.wallet.infrastructure.persistence;
 
+import com.playtomic.tests.wallet.domain.Balance;
+import com.playtomic.tests.wallet.domain.Transaction;
 import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.WalletId;
 import com.playtomic.tests.wallet.domain.WalletRepository;
@@ -13,22 +15,38 @@ import org.springframework.transaction.annotation.Transactional;
 public class JpaWalletRepository implements WalletRepository {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
+
+    public JpaWalletRepository(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Override
     public Wallet findById(WalletId walletId) {
-        return entityManager.find(Wallet.class, walletId);
+        return toEntity(entityManager.find(JpaWallet.class, walletId.getValue().toString()));
     }
 
     @Override
     public Wallet findForUpdateById(WalletId walletId) {
-        return entityManager.find(Wallet.class, walletId, LockModeType.PESSIMISTIC_WRITE);
-
+        return toEntity(entityManager.find(JpaWallet.class, walletId.getValue().toString(), LockModeType.OPTIMISTIC));
     }
 
     @Transactional
     @Override
     public void save(Wallet wallet) {
-        entityManager.persist(wallet);
+        entityManager.persist(toJpa(wallet));
+    }
+
+    private Wallet toEntity(JpaWallet jpaWallet) {
+        return new Wallet(WalletId.fromString(jpaWallet.getId()),
+                new Balance(jpaWallet.getBalance()),
+                jpaWallet.getTransactions().stream().map(transaction -> new Transaction(transaction.getPaymentId(), transaction.getAmount()))
+                        .toList());
+    }
+
+    private JpaWallet toJpa(Wallet wallet) {
+        return new JpaWallet(wallet.getId().getValue().toString(), wallet.balance().amount,
+                wallet.transactions().stream().map(transaction -> new JpaTransaction(transaction.getPaymentId(), transaction.getAmount()))
+                        .toList());
     }
 }

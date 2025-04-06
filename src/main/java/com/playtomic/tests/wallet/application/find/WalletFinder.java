@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class WalletFinder {
-    private WalletRepository walletRepository;
+    private final WalletRepository walletRepository;
 
     public WalletFinder(WalletRepository walletRepository) {
         this.walletRepository = walletRepository;

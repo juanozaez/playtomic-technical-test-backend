@@ -6,8 +6,10 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
+import lombok.Data;
 import lombok.Getter;
 
+@Data
 public class Wallet {
 
     @Getter
@@ -15,7 +17,7 @@ public class Wallet {
     private Balance balance;
     private List<Transaction> transactions;
 
-    private Wallet(WalletId id, Balance balance, List<Transaction> transactions) {
+    public Wallet(WalletId id, Balance balance, List<Transaction> transactions) {
         this.id = id;
         this.balance = balance;
         this.transactions = transactions;
@@ -48,15 +50,8 @@ public class Wallet {
     public Balance balance() {
         return this.balance;
     }
-}
-
-class Transaction {
-    private String paymentId;
-    private BigDecimal amount;
-
-    public Transaction(String paymentId, BigDecimal amount) {
-        this.paymentId = paymentId;
-        this.amount = amount;
+    public List<Transaction> transactions() {
+        return this.transactions;
     }
 }
 

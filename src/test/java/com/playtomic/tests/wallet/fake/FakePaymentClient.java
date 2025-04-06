@@ -19,7 +19,7 @@ public class FakePaymentClient implements PaymentClient {
     @Override
     public String charge(@NonNull Card card, @NonNull BigDecimal amount) {
         String paymentId = UUID.randomUUID().toString();
-        payments.put(paymentId, new PaymentRecord(card.number(), amount, false));
+        payments.put(paymentId, new PaymentRecord(card.numberAsString(), amount, false));
         return paymentId;
     }
 

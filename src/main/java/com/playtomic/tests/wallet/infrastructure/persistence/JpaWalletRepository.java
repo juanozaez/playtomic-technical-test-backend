@@ -30,7 +30,7 @@ public class JpaWalletRepository implements WalletRepository {
 
     @Override
     public Wallet findById(WalletId walletId) {
-        return repository.findById(walletId.getValue().toString())
+        return repository.findById(walletId.value().toString())
                 .map(this::toEntity)
                 .orElse(null);
     }
@@ -38,7 +38,7 @@ public class JpaWalletRepository implements WalletRepository {
     @Transactional
     @Override
     public Wallet findForUpdateById(WalletId walletId) {
-        return toEntity(entityManager.find(JpaWallet.class, walletId.getValue().toString(), LockModeType.PESSIMISTIC_READ));
+        return toEntity(entityManager.find(JpaWallet.class, walletId.value().toString(), LockModeType.PESSIMISTIC_READ));
     }
 
     @Override
@@ -56,7 +56,7 @@ public class JpaWalletRepository implements WalletRepository {
     }
 
     private JpaWallet toJpa(Wallet wallet) {
-        return new JpaWallet(wallet.id().getValue().toString(), wallet.balance().amount,
+        return new JpaWallet(wallet.id().value().toString(), wallet.balance().amount(),
                 wallet
                         .transactions()
                         .stream()

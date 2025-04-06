@@ -20,7 +20,7 @@ public class FindWalletController {
     @GetMapping("/wallets/{id}")
     FindWalletResponse find(@PathVariable String id) {
         Wallet wallet = finder.findById(new WalletId(UUID.fromString(id)));
-        return new FindWalletResponse(wallet.id().getValue().toString(), wallet.balance().amount);
+        return new FindWalletResponse(wallet.id().value().toString(), wallet.balance().amount());
     }
 
 }

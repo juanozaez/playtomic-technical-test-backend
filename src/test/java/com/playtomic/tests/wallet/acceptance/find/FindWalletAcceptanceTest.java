@@ -24,7 +24,7 @@ public class FindWalletAcceptanceTest extends AcceptanceTest {
                 given()
                         .contentType("application/json")
                         .when()
-                        .get("/wallets/{id}", wallet.id().getValue())
+                        .get("/wallets/{id}", wallet.id().value())
                         .then()
                         .statusCode(200)
                         .extract()
@@ -43,5 +43,5 @@ public class FindWalletAcceptanceTest extends AcceptanceTest {
                 "id": "%s",
                 "balance": %.2f
             }
-            """, wallet.id().getValue(), wallet.balance().amount);
+            """, wallet.id().value(), wallet.balance().amount());
 }

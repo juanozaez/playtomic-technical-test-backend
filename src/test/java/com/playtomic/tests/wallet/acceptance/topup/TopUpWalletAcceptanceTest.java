@@ -40,7 +40,7 @@ public class TopUpWalletAcceptanceTest extends AcceptanceTest {
                 contentType("application/json").
                 body(body).
                 when().
-                post("/wallets/{id}/transactions", wallet.id().getValue()).
+                post("/wallets/{id}/transactions", wallet.id().value()).
                 then().
                 statusCode(200);
 
@@ -53,7 +53,7 @@ public class TopUpWalletAcceptanceTest extends AcceptanceTest {
 
     private final Wallet wallet = WalletMother.positiveWallet();
     private final BigDecimal topUpAmount = new BigDecimal("30.50");
-    private final Balance expectedBalance = new Balance(topUpAmount.add(wallet.balance().amount));
+    private final Balance expectedBalance = new Balance(topUpAmount.add(wallet.balance().amount()));
     private final Card card = CardMother.valid();
     private final String body = String.format("""
             {

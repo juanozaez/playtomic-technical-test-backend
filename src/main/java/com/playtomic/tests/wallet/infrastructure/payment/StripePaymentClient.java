@@ -46,7 +46,7 @@ public class StripePaymentClient implements PaymentClient {
 
     @Override
     public String charge(@NonNull Card card, @NonNull BigDecimal amount) throws StripeServiceException {
-        ChargeRequest body = new ChargeRequest(card.number(), amount);
+        ChargeRequest body = new ChargeRequest(card.numberAsString(), amount);
         return restTemplate.postForObject(chargesUri, body, Payment.class).getId();
     }
 

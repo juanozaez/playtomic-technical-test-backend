@@ -20,7 +20,7 @@ public record Wallet(WalletId id, Balance balance, List<Transaction> transaction
 
         List<Transaction> updatedTransactions = new ArrayList<>(this.transactions);
         updatedTransactions.add(newTransaction);
-        return new Wallet(this.id, new Balance(this.balance.amount.add(amount)), updatedTransactions);
+        return new Wallet(this.id, new Balance(this.balance.amount().add(amount)), updatedTransactions);
     }
 }
 

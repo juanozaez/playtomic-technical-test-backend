@@ -21,7 +21,7 @@ public class FindWalletTest {
     }
 
     @Test
-    public void findsWallet() {
+    public void finds_wallet() {
         repository.save(wallet);
 
         Wallet result = finder.findById(wallet.getId());
@@ -30,7 +30,7 @@ public class FindWalletTest {
     }
 
     @Test
-    public void returnsErrorIfWalletNotFound() {
+    public void returns_error_if_wallet_not_found() {
         assertThrows(WalletNotFoundError.class, () -> finder.findById(wallet.getId()));
     }
 

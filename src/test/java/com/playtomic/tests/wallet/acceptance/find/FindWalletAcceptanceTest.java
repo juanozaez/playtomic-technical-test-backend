@@ -32,7 +32,7 @@ public class FindWalletAcceptanceTest {
     }
 
     @Test
-    public void findsWallet() throws JSONException {
+    public void finds_wallet() throws JSONException {
         walletExists();
 
         String actualBody =

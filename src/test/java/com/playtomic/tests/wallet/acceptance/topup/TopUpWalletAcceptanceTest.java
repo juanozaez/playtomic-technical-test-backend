@@ -44,7 +44,7 @@ public class TopUpWalletAcceptanceTest {
     private final StripeMockServer stripeMockServer = new StripeMockServer();
 
     @Test
-    public void topsUpWallet() {
+    public void tops_up_wallet() {
         walletExists();
         stripeMockServer.stubCharge(card, topUpAmount, "123456789");
 

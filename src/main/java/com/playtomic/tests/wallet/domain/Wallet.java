@@ -32,16 +32,6 @@ public class Wallet {
         return new Wallet(this.id, new Balance(this.balance.amount.add(amount)), this.transactions);
     }
 
-    public Wallet charge(BigDecimal amount) {
-        // TODO Not implemented but to be discussed
-        return this;
-    }
-
-    public Wallet refund(String transactionId) {
-        // TODO Not implemented but to be discussed
-        return this;
-    }
-
     public Balance balance() {
         return this.balance;
     }

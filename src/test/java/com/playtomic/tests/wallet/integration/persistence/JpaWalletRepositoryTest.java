@@ -17,7 +17,7 @@ public class JpaWalletRepositoryTest {
 
     @Test
     @Transactional
-    void savesAndFindsWallet() {
+    void saves_and_finds_wallet() {
         repo.save(wallet);
 
         Wallet result = repo.findById(wallet.getId());
@@ -27,7 +27,7 @@ public class JpaWalletRepositoryTest {
 
     @Test
     @Transactional
-    void findsWalletForUpdate() {
+    void finds_wallet_for_update() {
         // TODO to improve: proper assertion to verify a lock is taking place
     }
 

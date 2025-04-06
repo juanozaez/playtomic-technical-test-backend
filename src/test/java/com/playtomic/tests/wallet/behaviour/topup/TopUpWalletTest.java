@@ -29,7 +29,7 @@ public class TopUpWalletTest {
     }
 
     @Test
-    public void topsUpWallet() {
+    public void tops_up_wallet() {
         walletExists();
 
         topUpMaker.topUp(wallet.getId(), amount, card);
@@ -40,12 +40,12 @@ public class TopUpWalletTest {
     }
 
     @Test
-    public void returnsErrorIfWalletNotFound() {
+    public void returns_error_if_wallet_not_found() {
         assertThrows(WalletNotFoundError.class, () -> topUpMaker.topUp(wallet.getId(), amount, card));
     }
 
     @Test
-    public void returnsErrorIfAmountNegative() {
+    public void returns_error_if_amount_negative() {
         walletExists();
 
         assertThrows(NegativeAmountError.class, () -> topUpMaker.topUp(wallet.getId(), BigDecimal.valueOf(-1), card));

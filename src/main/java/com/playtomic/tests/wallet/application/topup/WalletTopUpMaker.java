@@ -10,6 +10,7 @@ import com.playtomic.tests.wallet.domain.error.WalletNotFoundError;
 import java.math.BigDecimal;
 import lombok.NonNull;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class WalletTopUpMaker {
@@ -21,6 +22,7 @@ public class WalletTopUpMaker {
         this.paymentClient = paymentClient;
     }
 
+    @Transactional
     public void topUp(@NonNull WalletId walletId, @NonNull BigDecimal amount, @NonNull Card card, @NonNull TransactionId transactionId) {
         Wallet wallet = walletRepository.findByIdLocking(walletId);
         if (wallet == null) {

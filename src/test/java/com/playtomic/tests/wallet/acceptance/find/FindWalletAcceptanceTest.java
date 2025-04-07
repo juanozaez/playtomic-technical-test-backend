@@ -23,14 +23,25 @@ public class FindWalletAcceptanceTest extends AcceptanceTest {
         String actualBody =
                 given()
                         .contentType("application/json")
-                        .when()
+                .when()
                         .get("/wallets/{id}", wallet.id().value())
-                        .then()
+                .then()
                         .statusCode(200)
                         .extract()
                         .asString();
 
         JSONAssert.assertEquals(expectedBody, actualBody, true);
+    }
+
+    @Test
+    public void returns_404_if_wallet_not_found() throws JSONException {
+        given()
+                .contentType("application/json")
+        .when()
+                .get("/wallets/{id}", wallet.id().value())
+        .then()
+                .statusCode(404);
+
     }
 
     private void walletExists() {

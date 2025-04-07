@@ -39,12 +39,23 @@ public class TopUpWalletAcceptanceTest extends AcceptanceTest {
         given().
                 contentType("application/json").
                 body(body).
-                when().
+        when().
                 post("/wallets/{id}/transactions", wallet.id().value()).
-                then().
+        then().
                 statusCode(200);
 
         assert walletRepository.findById(wallet.id()).balance().equals(expectedBalance);
+    }
+
+    @Test
+    public void returns_404_if_wallet_not_found() {
+        given().
+                contentType("application/json").
+                body(body).
+        when().
+                post("/wallets/{id}/transactions", wallet.id().value()).
+        then().
+                statusCode(404);
     }
 
     private void walletExists() {

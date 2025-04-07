@@ -35,7 +35,7 @@ public class StripePaymentClient implements PaymentClient {
         this.chargesUri = chargesUri;
         this.refundsUri = refundsUri;
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_OCTET_STREAM));
+        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         this.restTemplate =
                 restTemplateBuilder

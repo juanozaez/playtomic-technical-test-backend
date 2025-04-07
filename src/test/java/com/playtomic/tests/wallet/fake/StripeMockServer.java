@@ -35,6 +35,7 @@ public class StripeMockServer {
                         .willReturn(
                                 aResponse().
                                         withBody("{ \"id\": \"" + paymentId + "\" }").
+                                        withHeader("Content-Type", "application/json").
                                         withStatus(200)));
     }
 
@@ -44,6 +45,7 @@ public class StripeMockServer {
                         .withRequestBody(equalToJson("{ \"amount\": " + amount + ", \"credit_card\": \"" + card.numberAsString() + "\" }"))
                         .willReturn(
                                 aResponse().
+                                        withHeader("Content-Type", "application/json").
                                         withStatus(422)));
     }
 
@@ -52,6 +54,7 @@ public class StripeMockServer {
                 post("/charges")
                         .willReturn(
                                 aResponse().
+                                        withHeader("Content-Type", "application/json").
                                         withStatus(errorCode)));
     }
 

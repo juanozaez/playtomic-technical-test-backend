@@ -58,6 +58,19 @@ public class TopUpWalletAcceptanceTest extends AcceptanceTest {
                 statusCode(404);
     }
 
+    @Test
+    public void returns_400_if_amount_negative() {
+        walletExists();
+
+        given().
+                contentType("application/json").
+                body(negativeBody).
+        when().
+                post("/wallets/{id}/transactions", wallet.id().value()).
+        then().
+                statusCode(400);
+    }
+
     private void walletExists() {
         walletRepository.save(wallet);
     }
@@ -75,4 +88,14 @@ public class TopUpWalletAcceptanceTest extends AcceptanceTest {
                 }
             }
             """, topUpAmount, card.numberAsString());
+
+    private final String negativeBody = String.format("""
+            {
+                "transactionId": "92b4dd20-84c1-412d-819a-e48420830d33",
+                "amount": -10,
+                "creditCard": {
+                    "cardNumber": "%s"
+                }
+            }
+            """, card.numberAsString());
 }

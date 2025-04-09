@@ -13,14 +13,18 @@ public record Wallet(WalletId id, Balance balance, List<Transaction> transaction
     }
 
     public Wallet topUp(BigDecimal amount, TransactionId transactionId) {
+        guardPositiveAmount(amount);
+
+        List<Transaction> updatedTransactions = new ArrayList<>(transactions);
+        updatedTransactions.add(new Transaction(transactionId, amount));
+
+        return new Wallet(id, balance.add(amount), updatedTransactions);
+    }
+
+    private void guardPositiveAmount(BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new NegativeAmountError();
         }
-        Transaction newTransaction = new Transaction(transactionId, amount);
-
-        List<Transaction> updatedTransactions = new ArrayList<>(this.transactions);
-        updatedTransactions.add(newTransaction);
-        return new Wallet(this.id, new Balance(this.balance.amount().add(amount)), updatedTransactions);
     }
 }
 

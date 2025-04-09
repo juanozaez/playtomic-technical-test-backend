@@ -1,8 +1,18 @@
 package com.playtomic.tests.card.domain;
 
-public record Card(CardNumber number) {
+import com.playtomic.tests.card.domain.error.InvalidCardError;
+import lombok.NonNull;
 
-    public String numberAsString(){
+public record Card(@NonNull CardNumber number) {
+
+    public Card {
+        if (number.value().isBlank()) {
+            throw new InvalidCardError();
+        }
+        // TODO add extra card validations
+    }
+
+    public String numberAsString() {
         return number.value();
     }
 }

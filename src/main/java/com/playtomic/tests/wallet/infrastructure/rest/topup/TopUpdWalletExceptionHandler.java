@@ -1,5 +1,6 @@
 package com.playtomic.tests.wallet.infrastructure.rest.topup;
 
+import com.playtomic.tests.card.domain.error.InvalidCardError;
 import com.playtomic.tests.wallet.domain.error.NegativeAmountError;
 import com.playtomic.tests.wallet.domain.error.WalletNotFoundError;
 import org.springframework.http.HttpStatus;
@@ -18,5 +19,10 @@ public class TopUpdWalletExceptionHandler {
     @ExceptionHandler(NegativeAmountError.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     void handle(NegativeAmountError error) {
+    }
+
+    @ExceptionHandler(InvalidCardError.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    void handle(InvalidCardError error) {
     }
 }

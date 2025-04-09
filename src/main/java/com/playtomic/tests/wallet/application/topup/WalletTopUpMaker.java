@@ -7,12 +7,12 @@ import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.WalletId;
 import com.playtomic.tests.wallet.domain.WalletRepository;
 import com.playtomic.tests.wallet.domain.error.WalletNotFoundError;
+import jakarta.inject.Named;
 import java.math.BigDecimal;
 import lombok.NonNull;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Named
 public class WalletTopUpMaker {
     private final WalletRepository walletRepository;
     private final PaymentClient paymentClient;

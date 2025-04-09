@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class FindWalletController {
 
-    private WalletFinder finder;
+    private final WalletFinder finder;
 
     public FindWalletController(WalletFinder finder) {
         this.finder = finder;

@@ -6,6 +6,6 @@ public record TransactionRequest(String transactionId,
                                  BigDecimal amount,
                                  CreditCard creditCard) {
 
-    public static record CreditCard(String cardNumber) {
+    public record CreditCard(String cardNumber) {
     }
 }

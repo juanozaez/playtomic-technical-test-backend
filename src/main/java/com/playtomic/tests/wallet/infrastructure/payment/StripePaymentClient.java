@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.playtomic.tests.card.domain.Card;
 import com.playtomic.tests.wallet.domain.PaymentClient;
 import com.playtomic.tests.wallet.infrastructure.payment.error.StripeServiceException;
+import jakarta.inject.Named;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.Collections;
@@ -17,17 +18,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 
-@Service
+@Named
 public class StripePaymentClient implements PaymentClient {
 
     @NonNull
-    private URI chargesUri;
+    private final URI chargesUri;
 
     @NonNull
-    private URI refundsUri;
+    private final URI refundsUri;
 
     @NonNull
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     public StripePaymentClient(@Value("${stripe.simulator.charges-uri}") @NonNull URI chargesUri,
                                @Value("${stripe.simulator.refunds-uri}") @NonNull URI refundsUri,

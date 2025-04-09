@@ -4,9 +4,9 @@ import com.playtomic.tests.wallet.domain.Wallet;
 import com.playtomic.tests.wallet.domain.WalletId;
 import com.playtomic.tests.wallet.domain.WalletRepository;
 import com.playtomic.tests.wallet.domain.error.WalletNotFoundError;
-import org.springframework.stereotype.Service;
+import jakarta.inject.Named;
 
-@Service
+@Named
 public class WalletFinder {
     private final WalletRepository walletRepository;
 

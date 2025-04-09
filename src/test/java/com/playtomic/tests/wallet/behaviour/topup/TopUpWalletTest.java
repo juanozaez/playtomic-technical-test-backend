@@ -7,6 +7,7 @@ import com.playtomic.tests.wallet.domain.Balance;
 import com.playtomic.tests.wallet.domain.Transaction;
 import com.playtomic.tests.wallet.domain.TransactionId;
 import com.playtomic.tests.wallet.domain.Wallet;
+import com.playtomic.tests.wallet.domain.error.ExistingTransactionError;
 import com.playtomic.tests.wallet.domain.error.NegativeAmountError;
 import com.playtomic.tests.wallet.domain.error.WalletNotFoundError;
 import com.playtomic.tests.wallet.fake.FakePaymentClient;
@@ -38,7 +39,7 @@ public class TopUpWalletTest {
         topUpMaker.topUp(wallet.id(), amount, card, transactionId);
 
         Wallet finalWallet = repository.findById(wallet.id());
-        assert finalWallet.balance().equals(new Balance(amount));
+        assert finalWallet.balance().equals(new Balance(amount).add(wallet.balance().amount()));
         assert finalWallet.transactions().contains(new Transaction(transactionId, amount));
         assert paymentClient.chargeMade(amount);
     }
@@ -55,11 +56,18 @@ public class TopUpWalletTest {
         assertThrows(NegativeAmountError.class, () -> topUpMaker.topUp(wallet.id(), BigDecimal.valueOf(-1), card, transactionId));
     }
 
+    @Test
+    public void returns_error_if_transaction_already_exists() {
+        walletExists();
+
+        assertThrows(ExistingTransactionError.class, () -> topUpMaker.topUp(wallet.id(), amount, card, wallet.transactions().stream().findFirst().get().id()));
+    }
+
     private void walletExists() {
         repository.save(wallet);
     }
 
-    private final Wallet wallet = WalletMother.emptyWallet();
+    private final Wallet wallet = WalletMother.positiveWallet();
     private final BigDecimal amount = new BigDecimal("11.30");
     private final Card card = CardMother.valid();
     private final TransactionId transactionId = new TransactionId(UUID.randomUUID());

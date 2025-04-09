@@ -39,9 +39,9 @@ public class TopUpWalletAcceptanceTest extends AcceptanceTest {
         given().
                 contentType("application/json").
                 body(body).
-        when().
+                when().
                 post("/wallets/{id}/transactions", wallet.id().value()).
-        then().
+                then().
                 statusCode(200);
 
         assert walletRepository.findById(wallet.id()).balance().equals(expectedBalance);
@@ -52,9 +52,9 @@ public class TopUpWalletAcceptanceTest extends AcceptanceTest {
         given().
                 contentType("application/json").
                 body(body).
-        when().
+                when().
                 post("/wallets/{id}/transactions", wallet.id().value()).
-        then().
+                then().
                 statusCode(404);
     }
 
@@ -65,9 +65,9 @@ public class TopUpWalletAcceptanceTest extends AcceptanceTest {
         given().
                 contentType("application/json").
                 body(negativeBody).
-        when().
+                when().
                 post("/wallets/{id}/transactions", wallet.id().value()).
-        then().
+                then().
                 statusCode(400);
     }
 
@@ -82,6 +82,19 @@ public class TopUpWalletAcceptanceTest extends AcceptanceTest {
                 post("/wallets/{id}/transactions", wallet.id().value()).
                 then().
                 statusCode(400);
+    }
+
+    @Test
+    public void returns_409_if_existing_transaction() {
+        walletExists();
+
+        given().
+                contentType("application/json").
+                body(existingTransactionBody).
+                when().
+                post("/wallets/{id}/transactions", wallet.id().value()).
+                then().
+                statusCode(409);
     }
 
     private void walletExists() {
@@ -121,4 +134,14 @@ public class TopUpWalletAcceptanceTest extends AcceptanceTest {
                 }
             }
             """;
+
+    private final String existingTransactionBody = String.format("""
+            {
+                "transactionId": "%s",
+                "amount": 15,
+                "creditCard": {
+                    "cardNumber": "1234"
+                }
+            }
+            """, wallet.transactions().stream().findFirst().get().id().toString());
 }

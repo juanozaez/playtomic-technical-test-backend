@@ -1,5 +1,6 @@
 package com.playtomic.tests.wallet.domain;
 
+import com.playtomic.tests.wallet.domain.error.ExistingTransactionError;
 import com.playtomic.tests.wallet.domain.error.NegativeAmountError;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public record Wallet(WalletId id, Balance balance, List<Transaction> transaction
 
     public Wallet topUp(BigDecimal amount, TransactionId transactionId) {
         guardPositiveAmount(amount);
+        guardExistingTransaction(transactionId);
 
         List<Transaction> updatedTransactions = new ArrayList<>(transactions);
         updatedTransactions.add(new Transaction(transactionId, amount));
@@ -24,6 +26,15 @@ public record Wallet(WalletId id, Balance balance, List<Transaction> transaction
     private void guardPositiveAmount(BigDecimal amount) {
         if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new NegativeAmountError();
+        }
+    }
+
+    private void guardExistingTransaction(TransactionId transactionId){
+        boolean transactionExists = transactions.stream()
+                .anyMatch(transaction -> transaction.id().equals(transactionId));
+
+        if (transactionExists) {
+            throw new ExistingTransactionError();
         }
     }
 }
